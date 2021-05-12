@@ -1,4 +1,4 @@
-trigger CalculMontant on OrderItem(after update, after insert, after delete) {
+trigger CalculMontant on OrderItem(after insert, after update, after delete) {
 	if (Trigger.isInsert | Trigger.isUpdate) {
 		List<Order> relatedOrders = [
 			SELECT Id, TotalAmount, ShipmentCost__c, (SELECT Id FROM OrderItems WHERE Id = :Trigger.New)
