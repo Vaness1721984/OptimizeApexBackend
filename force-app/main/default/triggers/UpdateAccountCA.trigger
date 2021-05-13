@@ -18,7 +18,7 @@ trigger UpdateAccountCA on Order(after insert, after update, after delete) {
 	List<AggregateResult> AggregateResultList = [
 		SELECT AccountId, SUM(TotalAmount) amt
 		FROM Order
-		WHERE AccountId IN :accset
+		WHERE Status = 'Ordered' AND AccountId IN :accset
 		GROUP BY AccountId
 	];
 	if (AggregateResultList != null && AggregateResultList.size() > 0) {
