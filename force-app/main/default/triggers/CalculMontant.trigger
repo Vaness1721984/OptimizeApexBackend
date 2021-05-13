@@ -1,35 +1,39 @@
 trigger CalculMontant on OrderItem(after insert, after update, after delete) {
-	List<Order> ordersToUpdate = new List<Order>();
+	map<id, Order> updateMap = new Map<id, Order>();
+	set<ID> ordset = new Set<ID>();
 
 	if (Trigger.isInsert | Trigger.isUpdate) {
-		for (Order ord : [
-			SELECT Id, TotalAmount, ShipmentCost__c
-			FROM Order
-			WHERE Id IN (SELECT OrderId FROM OrderItem WHERE Id = :Trigger.new)
-		]) {
-			if (ord.TotalAmount > 0) {
-				ord.NetAmount__c = ord.TotalAmount - ord.ShipmentCost__c;
-				ordersToUpdate.add(ord);
-			} else {
-				ord.NetAmount__c = ord.TotalAmount;
-				ordersToUpdate.add(ord);
-			}
-			update ordersToUpdate;
+		for (OrderItem ord : Trigger.new) {
+			if (ord.OrderId != null)
+				ordset.add(ord.OrderId);
 		}
 	}
 	if (Trigger.isDelete) {
-		for (Order ords : [
-			SELECT Id, TotalAmount, ShipmentCost__c, (SELECT Id FROM OrderItems WHERE Id = :Trigger.Old)
-			FROM Order
-		]) {
-			if (ords.TotalAmount > 0) {
-				ords.NetAmount__c = ords.TotalAmount - ords.ShipmentCost__c;
-				ordersToUpdate.add(ords);
-			} else {
-				ords.NetAmount__c = ords.TotalAmount;
-				ordersToUpdate.add(ords);
-			}
-			update ordersToUpdate;
+		for (OrderItem ords : Trigger.old) {
+			if (ords.OrderId != null)
+				ordset.add(ords.OrderId);
 		}
 	}
+	List<OrderItem> ResultList = [
+		SELECT OrderId, Order.TotalAmount, Order.ShipmentCost__c
+		FROM OrderItem
+		WHERE OrderId IN :ordset
+	];
+
+	if (ResultList != null && ResultList.size() > 0) {
+		for (OrderItem res : ResultList) {
+			Order orde = new Order();
+			orde.Id = (id) res.get('OrderId');
+			orde.NetAmount__c = res.Order.TotalAmount - res.Order.ShipmentCost__c;
+			updateMap.put(orde.Id, orde);
+		}
+	} else {
+		for (id idSet : ordset) {
+			Order orde = new Order();
+			orde.Id = idSet;
+			orde.NetAmount__c = 0;
+			updateMap.put(orde.Id, orde);
+		}
+	}
+	update updateMap.values();
 }
