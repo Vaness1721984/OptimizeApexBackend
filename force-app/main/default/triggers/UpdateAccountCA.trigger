@@ -2,7 +2,7 @@ trigger UpdateAccountCA on Order(after insert, after update, after delete) {
 	map<id, Account> updateMap = new Map<id, Account>();
 	set<ID> accset = new Set<ID>();
 
-	if (Trigger.isInsert | Trigger.isUpdate) {
+	if (Trigger.isInsert || Trigger.isUpdate) {
 		for (Order ord : Trigger.new) {
 			if (ord.AccountId != null)
 				accset.add(ord.AccountId);

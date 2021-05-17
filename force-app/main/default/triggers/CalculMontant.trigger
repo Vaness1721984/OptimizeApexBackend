@@ -2,7 +2,7 @@ trigger CalculMontant on OrderItem(after insert, after update, after delete) {
 	map<id, Order> updateMap = new Map<id, Order>();
 	set<ID> ordset = new Set<ID>();
 
-	if (Trigger.isInsert | Trigger.isUpdate) {
+	if (Trigger.isInsert || Trigger.isUpdate) {
 		for (OrderItem ord : Trigger.new) {
 			if (ord.OrderId != null)
 				ordset.add(ord.OrderId);
