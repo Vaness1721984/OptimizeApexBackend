@@ -1,6 +1,6 @@
 @isTest
-private class TestUpdateAccountCA {
-	static testMethod void testPositiveUpdateAccountCAWithOneOrderWithOrderedStatus() {
+private class TestCalculMontant {
+	static testMethod void testPositiveUpdateNetAmountonOrder() {
 		// Test data setup
 		// Create a product
 		Product2 pd1 = new Product2(
@@ -63,14 +63,10 @@ private class TestUpdateAccountCA {
 		);
 		insert oi2;
 
-		//Update Status on Order
-		o1.Status = 'Ordered';
-		update o1;
-
-		// Retrieve the value in Chiffre_d_affaire__c field
-		acc1 = [SELECT Chiffre_d_affaire__c FROM Account WHERE Id = :acc1.Id];
+		// Retrieve the value in Net Amount field
+		o1 = [SELECT NetAmount__c FROM Order WHERE Id = :o1.Id];
 
 		//Test that the trigger correctly updated the CA
-		System.assertequals(1500, acc1.Chiffre_d_affaire__c);
+		System.assertequals(1498, o1.NetAmount__c);
 	}
 }
