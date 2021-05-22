@@ -1,76 +1,70 @@
 @isTest
-private class TestUpdateAccountCA {
-	static testMethod void testPositiveUpdateAccountCAWithOneOrderWithOrderedStatus() {
-		// Test data setup
-		// Create a product
-		Product2 pd1 = new Product2(
-			Name = 'Chemise Verte longue XYX',
-			Family = 'Chemise',
-			ProductCode = 'ABC123',
-			IsActive = true
-		);
-		insert pd1;
-
-		//Create the PricebookEntry Standard
-		PricebookEntry pbeStandard = new PricebookEntry(
-			Pricebook2Id = Test.getStandardPricebookId(),
-			Product2Id = pd1.Id,
-			UnitPrice = 50,
-			IsActive = true
-		);
-		insert pbeStandard;
-
-		// Create Price Book
-		PriceBook2 pb = new Pricebook2(Name = 'Standard Price Book', IsActive = true);
-		insert pb;
-
-		//Create the PricebookEntry Custom
-		PricebookEntry pbeCustom = new PricebookEntry(
-			Pricebook2Id = pb.Id,
-			Product2Id = pd1.Id,
-			UnitPrice = 50,
-			IsActive = true
-		);
-		insert pbeCustom;
-
-		// Create an Account with an Order
-		Account acc1 = new Account(Name = 'Test Account 1');
-		insert acc1;
-		Order o1 = new Order(
-			AccountId = acc1.Id,
-			EffectiveDate = date.parse('15/11/2021'),
-			ShipmentCost__c = 2,
-			Pricebook2Id = pbeCustom.Pricebook2Id,
-			Status = 'Draft'
-		);
-		insert o1;
-
-		// Create the order items
-		OrderItem oi1 = new OrderItem(
-			OrderId = o1.Id,
-			Product2Id = pd1.Id,
-			PricebookEntryId = pbeCustom.Id,
-			UnitPrice = pbeCustom.UnitPrice,
-			Quantity = 10
-		);
-		insert oi1;
-		OrderItem oi2 = new OrderItem(
-			OrderId = o1.Id,
-			Product2Id = pd1.Id,
-			PricebookEntryId = pbeCustom.Id,
-			UnitPrice = pbeCustom.UnitPrice,
-			Quantity = 20
-		);
-		insert oi2;
-
-		//Update Status on Order
-		o1.Status = 'Ordered';
-		update o1;
+public class TestUpdateAccountCA {
+	@isTest
+	static void testUpdateCAwith200AccountsAfterInsert() {
+		List<AggregateResult> aggr;
+		// Retrieve data set from DataFactory class
+		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(200, 2, 3);
 
 		// Retrieve the value in Chiffre_d_affaire__c field
-		acc1 = [SELECT Chiffre_d_affaire__c FROM Account WHERE Id = :acc1.Id];
+		Test.startTest();
+		aggr = [SELECT SUM(Chiffre_d_affaire__c) amt FROM Account WHERE Id IN (SELECT AccountId FROM Order)];
+		Test.stopTest();
+		//Verify that the trigger correctly updated the CA
+		for (AggregateResult ar : aggr)
+			System.assertEquals(600000, ar.get('amt'));
+	}
+	@isTest
+	static void testUpdateCAwith200AccountsAfterDelete() {
+		List<AggregateResult> aggr;
+		// Retrieve data set from DataFactory class
+		TestDataFactory.createTestRecordsForUpdateAccountCAForDeleteTrigger(200, 2, 3);
 
-		//Test that the trigger correctly updated the CA
-		System.assertequals(1500, acc1.Chiffre_d_affaire__c);
+		// Retrieve the value in Chiffre_d_affaire__c field
+		Test.startTest();
+		aggr = [SELECT SUM(Chiffre_d_affaire__c) amt FROM Account WHERE Id IN (SELECT AccountId FROM Order)];
+		Test.stopTest();
+		//Verify that the trigger correctly updated the CA
+		for (AggregateResult ar : aggr)
+			System.assertEquals(0, ar.get('amt'));
+	}
+
+	@isTest
+	static void testAccountCreation() {
+		List<Account> accts;
+		// Retrieve data set from DataFactory class
+		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
+		//Retrieve the list of IDs for Account
+		Test.startTest();
+		accts = [SELECT ID FROM Account];
+		Test.stopTest();
+		// Verify that the correct number of accounts has been created
+		System.assertEquals(10, accts.size());
+	}
+
+	@isTest
+	static void testOrderCreation() {
+		List<Order> ords;
+		// Retrieve data set from DataFactory class
+		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
+		//Retrieve the list of IDs for Order
+		Test.startTest();
+		ords = [SELECT ID FROM Order];
+		Test.stopTest();
+		// Verify that the correct number of orders has been created
+		System.assertEquals(20, ords.size());
+	}
+
+	@isTest
+	static void testOrderItemCreation() {
+		List<OrderItem> orits;
+		// Retrieve data set from DataFactory class
+		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
+		//Retrieve the list of IDs for Order Item
+		Test.startTest();
+		orits = [SELECT ID FROM OrderItem];
+		Test.stopTest();
+		// Verify that the correct number of order items has been created
+		System.assertEquals(80, orits.size());
 	}
 }
