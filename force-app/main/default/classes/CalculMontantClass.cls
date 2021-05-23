@@ -1,4 +1,4 @@
-public class MontantNetOnOrderClass {
+public class CalculMontantClass {
 	public static void updateNetAmountOnOrder(List<OrderItem> listOfOrderItems) {
 		map<id, Order> updateMap = new Map<id, Order>();
 		set<ID> ordset = new Set<ID>();
