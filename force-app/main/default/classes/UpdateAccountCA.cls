@@ -14,21 +14,21 @@ public with sharing class UpdateAccountCA {
 			WHERE Status = 'Ordered' AND AccountId IN :accset
 			GROUP BY AccountId
 		];
-		if (AggregateResultList != null && AggregateResultList.size() > 0) {
-			for (AggregateResult aggr : AggregateResultList) {
-				Account acc = new Account();
-				acc.Id = (id) aggr.get('AccountId');
-				acc.Chiffre_d_affaire__c = (decimal) aggr.get('amt');
-				updateMap.put(acc.Id, acc);
-			}
-		} else {
+		/*if (AggregateResultList != null && AggregateResultList.size() > 0) {*/
+		for (AggregateResult aggr : AggregateResultList) {
+			Account acc = new Account();
+			acc.Id = (id) aggr.get('AccountId');
+			acc.Chiffre_d_affaire__c = (decimal) aggr.get('amt');
+			updateMap.put(acc.Id, acc);
+		}
+		/*} else {
 			for (id idSet : accset) {
 				Account acc = new Account();
 				acc.Id = idSet;
 				acc.Chiffre_d_affaire__c = 0;
 				updateMap.put(acc.Id, acc);
 			}
-		}
+		}*/
 		update updateMap.values();
 	}
 }
