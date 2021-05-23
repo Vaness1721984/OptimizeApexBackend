@@ -1,28 +1,21 @@
 global class UpdateAccount implements Database.Batchable<sObject> {
+	public integer countRecords = 0;
 	global Database.QueryLocator start(Database.BatchableContext info) {
-		//Requeter seulement les comptes qui ont au moins une commande avec le Status 'Ordered'
-
-		return Database.getQueryLocator(
-			'SELECT Id FROM Account WHERE Id IN (SELECT AccountId FROM Order WHERE STATUS = \'Ordered\')'
-		);
+		//Query only accounts with at least one order with status 'Ordered'
+		String query = 'SELECT Id FROM Account WHERE Id IN (SELECT AccountId FROM Order WHERE STATUS = \'Ordered\')';
+		return Database.getQueryLocator(query);
 	}
 
-	global void execute(Database.BatchableContext info, List<Account> scope) {
-		list<Order> listOrders = [SELECT Id, TotalAmount, AccountId FROM Order];
-
-		for (integer i = 0; i < scope.size(); i++) {
-			Account myAccount = scope[i];
-			myAccount.Chiffre_d_affaire__c = 0;
-			for (integer j = 0; j < listOrders.size(); j++) {
-				if (listOrders[j].AccountId == myAccount.Id) {
-					myAccount.Chiffre_d_affaire__c = myAccount.Chiffre_d_affaire__c + listOrders[j].TotalAmount;
-				}
-			}
-		}
-
-		update scope;
+	global void execute(Database.BatchableContext info, Account[] scope) {
+		countRecords += scope.size();
 	}
 
 	global void finish(Database.BatchableContext info) {
+		System.debug(countRecords + ' records processed.');
+		AsyncApexJob job = [
+			SELECT Id, Status, NumberOfErrors, JobItemsProcessed, TotalJobItems, CreatedBy.Email
+			FROM AsyncApexJob
+			WHERE Id = :info.getJobId()
+		];
 	}
 }
