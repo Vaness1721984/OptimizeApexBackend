@@ -19,12 +19,21 @@ public class MyTeamOrdersController_Tests {
 		);
 
 		System.runAs(u) {
-			List<AggregateResult> aggr;
+			List<Account> accts;
 			Test.startTest();
-			aggr = [SELECT SUM(TotalAmount) total FROM Order];
+			accts = [SELECT Id FROM Account];
 			Test.stopTest();
-			for (AggregateResult ar : aggr)
-				system.assertEquals(2000, ar.get('total'));
+			system.assertEquals(0, accts.size());
 		}
+	}
+	@isTest
+	static void PermissionSetTest_Positive() {
+		TestFactory.createTestRecordsForMyTeamOrdersController(1, 2, 2);
+		List<AggregateResult> aggr;
+		Test.startTest();
+		aggr = [SELECT SUM(TotalAmount) total FROM Order];
+		Test.stopTest();
+		for (AggregateResult ar : aggr)
+			system.assertEquals(2000, ar.get('total'));
 	}
 }
