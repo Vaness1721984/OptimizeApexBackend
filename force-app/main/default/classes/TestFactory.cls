@@ -1,5 +1,5 @@
 @isTest
-public class TestDataFactory {
+public class TestFactory {
 	public static void createTestRecordsForUpdateAccountCAForInsertTrigger(
 		Integer numAccts,
 		Integer numOrdersPerAcct,
@@ -365,6 +365,113 @@ public class TestDataFactory {
 					new Order(
 						AccountId = acct.Id,
 						EffectiveDate = date.parse('15/11/2021'),
+						ShipmentCost__c = 2,
+						Pricebook2Id = pbeCustom.Pricebook2Id,
+						Status = 'Draft'
+					)
+				);
+			}
+		}
+
+		insert ords;
+
+		// Create the order item
+		List<OrderItem> oi = new List<OrderItem>();
+		for (Integer l = 0; l < numOrdersPerAcct; l++) {
+			Order ord = ords[l];
+			for (
+				Integer m = numAccts * numOrderItemsPerOrder * l; m < numAccts * numOrderItemsPerOrder * (l + 1); m++
+			) {
+				oi.add(
+					new OrderItem(
+						OrderId = ord.Id,
+						Product2Id = pd1.Id,
+						PricebookEntryId = pbeCustom.Id,
+						UnitPrice = pbeCustom.UnitPrice,
+						Quantity = 10
+					)
+				);
+			}
+		}
+		insert oi;
+		//Update Status on Order to "Ordered"
+		List<Order> listToUpdate = new List<Order>();
+		for (Order con : ords) {
+			con.Status = 'Ordered';
+			listToUpdate.add(con);
+		}
+		update listToUpdate;
+	}
+
+	public static void createTestRecordsForMyTeamOrdersController(
+		Integer numAccts,
+		Integer numOrdersPerAcct,
+		Integer numOrderItemsPerOrder
+	) {
+		// Create Owner
+		User u = new User(
+			ProfileId = [SELECT Id FROM Profile WHERE Name = 'Sales']
+			.Id,
+			LastName = 'Commercial',
+			FirstName = 'USA',
+			Email = 'Commercial_USA@fasha.com',
+			UserName = 'Commercial_usa-crm@fasha.com',
+			Alias = 'alias',
+			TimeZoneSidKey = 'Europe/Paris',
+			EmailEncodingKey = 'UTF-8',
+			LanguageLocaleKey = 'en_US',
+			LocaleSidKey = 'en_US'
+		);
+		insert u;
+
+		// Create a product
+		Product2 pd1 = new Product2(
+			Name = 'Chemise Verte longue XYX',
+			Family = 'Chemise',
+			ProductCode = 'ABC123',
+			IsActive = true
+		);
+		insert pd1;
+
+		//Create the PricebookEntry Standard
+		PricebookEntry pbeStandard = new PricebookEntry(
+			Pricebook2Id = Test.getStandardPricebookId(),
+			Product2Id = pd1.Id,
+			UnitPrice = 50,
+			IsActive = true
+		);
+		insert pbeStandard;
+
+		// Create Price Book
+		PriceBook2 pb = new Pricebook2(Name = 'Standard Price Book', IsActive = true);
+		insert pb;
+
+		//Create the PricebookEntry Custom
+		PricebookEntry pbeCustom = new PricebookEntry(
+			Pricebook2Id = pb.Id,
+			Product2Id = pd1.Id,
+			UnitPrice = 50,
+			IsActive = true
+		);
+		insert pbeCustom;
+
+		// Create Accounts with an Order
+		List<Account> accts = new List<Account>();
+
+		for (Integer i = 0; i < numAccts; i++) {
+			Account a = new Account(Name = 'Test Account USD' + i, OwnerId = u.Id);
+			accts.add(a);
+		}
+		insert accts;
+
+		List<Order> ords = new List<Order>();
+		for (Integer j = 0; j < numAccts; j++) {
+			Account acct = accts[j];
+			for (Integer k = numOrdersPerAcct * j; k < numOrdersPerAcct * (j + 1); k++) {
+				ords.add(
+					new Order(
+						AccountId = acct.Id,
+						EffectiveDate = System.today(),
 						ShipmentCost__c = 2,
 						Pricebook2Id = pbeCustom.Pricebook2Id,
 						Status = 'Draft'

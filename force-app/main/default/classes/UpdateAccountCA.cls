@@ -1,4 +1,4 @@
-public with sharing class UpdateAccountCA {
+public class UpdateAccountCA {
 	public static void UpdateAccountCA(List<Order> listOfOrders) {
 		map<id, Account> updateMap = new Map<id, Account>();
 		set<ID> accset = new Set<ID>();

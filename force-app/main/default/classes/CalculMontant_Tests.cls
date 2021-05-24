@@ -1,9 +1,9 @@
 @isTest
-private class TestCalculMontant {
+private class CalculMontant_Tests {
 	static testMethod void testPositiveUpdateNetAmountonOrderAfterInsert() {
 		List<AggregateResult> aggr;
 
-		TestDataFactory.createTestRecordsForCalculMontantForInsertTrigger();
+		TestFactory.createTestRecordsForCalculMontantForInsertTrigger();
 
 		// Retrieve the value in Net Amount field
 		Test.startTest();
@@ -16,7 +16,7 @@ private class TestCalculMontant {
 	static testMethod void testPositiveUpdateNetAmountonOrderAfterDelete() {
 		List<AggregateResult> aggr;
 
-		TestDataFactory.createTestRecordsForCalculMontantForDeleteTrigger();
+		TestFactory.createTestRecordsForCalculMontantForDeleteTrigger();
 
 		// Retrieve the value in Net Amount field
 		Test.startTest();

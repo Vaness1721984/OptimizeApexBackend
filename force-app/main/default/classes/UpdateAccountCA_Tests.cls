@@ -1,10 +1,10 @@
 @isTest
-public class TestUpdateAccountCA {
+public class UpdateAccountCA_Tests {
 	@isTest
 	static void testUpdateCAwith200AccountsAfterInsert() {
 		List<AggregateResult> aggr;
 		// Retrieve data set from DataFactory class
-		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(200, 2, 3);
+		TestFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(200, 2, 3);
 
 		// Retrieve the value in Chiffre_d_affaire__c field
 		Test.startTest();
@@ -18,7 +18,7 @@ public class TestUpdateAccountCA {
 	static void testUpdateCAwith200AccountsAfterDelete() {
 		List<AggregateResult> aggr;
 		// Retrieve data set from DataFactory class
-		TestDataFactory.createTestRecordsForUpdateAccountCAForDeleteTrigger(200, 2, 3);
+		TestFactory.createTestRecordsForUpdateAccountCAForDeleteTrigger(200, 2, 3);
 
 		// Retrieve the value in Chiffre_d_affaire__c field
 		Test.startTest();
@@ -33,7 +33,7 @@ public class TestUpdateAccountCA {
 	static void testAccountCreation() {
 		List<Account> accts;
 		// Retrieve data set from DataFactory class
-		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
+		TestFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
 		//Retrieve the list of IDs for Account
 		Test.startTest();
 		accts = [SELECT ID FROM Account];
@@ -46,7 +46,7 @@ public class TestUpdateAccountCA {
 	static void testOrderCreation() {
 		List<Order> ords;
 		// Retrieve data set from DataFactory class
-		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
+		TestFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
 		//Retrieve the list of IDs for Order
 		Test.startTest();
 		ords = [SELECT ID FROM Order];
@@ -59,7 +59,7 @@ public class TestUpdateAccountCA {
 	static void testOrderItemCreation() {
 		List<OrderItem> orits;
 		// Retrieve data set from DataFactory class
-		TestDataFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
+		TestFactory.createTestRecordsForUpdateAccountCAForInsertTrigger(10, 2, 4);
 		//Retrieve the list of IDs for Order Item
 		Test.startTest();
 		orits = [SELECT ID FROM OrderItem];

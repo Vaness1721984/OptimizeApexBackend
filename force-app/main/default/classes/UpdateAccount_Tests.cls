@@ -1,10 +1,10 @@
 @isTest
-public class TestUpdateAccount {
+public class UpdateAccount_Tests {
 	@isTest
 	static void testUpdateCAwith1000AccountsInBatch() {
 		List<AggregateResult> aggr;
 		// Retrieve data set from DataFactory class
-		TestDataFactory.createTestRecordsToUpdateAccountCAInBatch(1000, 1, 1);
+		TestFactory.createTestRecordsToUpdateAccountCAInBatch(1000, 1, 1);
 		//Execute Batch
 		Test.startTest();
 		UpdateAccount ua = new UpdateAccount();
