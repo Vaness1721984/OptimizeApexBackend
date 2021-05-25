@@ -1,5 +1,5 @@
 @isTest
-public class UpdateAccount_Tests {
+public class BatchUpdateAccount_Tests {
 	@isTest
 	static void testUpdateCAwith1000AccountsInBatch() {
 		List<AggregateResult> aggr;
@@ -7,7 +7,7 @@ public class UpdateAccount_Tests {
 		TestFactory.createTestRecordsToUpdateAccountCAInBatch(1000, 1, 1);
 		//Execute Batch
 		Test.startTest();
-		UpdateAccount ua = new UpdateAccount();
+		BatchUpdateAccount ua = new BatchUpdateAccount();
 		Id batchId = Database.executeBatch(ua, 1000);
 		aggr = [SELECT SUM(Chiffre_d_affaire__c) amt FROM Account WHERE Id IN (SELECT AccountId FROM Order)];
 		Test.stopTest();

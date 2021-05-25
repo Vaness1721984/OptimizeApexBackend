@@ -1,4 +1,4 @@
-global class UpdateAccount implements Database.Batchable<AggregateResult>, Database.Stateful {
+global class BatchUpdateAccount implements Database.Batchable<AggregateResult>, Database.Stateful {
 	public Integer recordsProcessed = 0;
 	global Iterable<AggregateResult> start(Database.BatchableContext info) {
 		//Query only accounts with at least one order with status 'Ordered'
