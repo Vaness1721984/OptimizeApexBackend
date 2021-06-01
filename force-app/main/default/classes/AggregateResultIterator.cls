@@ -1,6 +1,6 @@
 global class AggregateResultIterator implements Iterator<AggregateResult> {
 	AggregateResult[] results { get; set; }
-	// tracks which result item is returned
+	// Tracks which result item is returned
 	Integer index { get; set; }
 
 	global AggregateResultIterator(String query) {

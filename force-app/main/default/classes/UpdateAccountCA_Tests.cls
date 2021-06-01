@@ -10,7 +10,7 @@ public class UpdateAccountCA_Tests {
 		Test.startTest();
 		aggr = [SELECT SUM(Chiffre_d_affaire__c) amt FROM Account WHERE Id IN (SELECT AccountId FROM Order)];
 		Test.stopTest();
-		//Verify that the trigger correctly updated the CA
+		//Verify that the trigger correctly updated Chiffre_d_affaire__c field
 		for (AggregateResult ar : aggr)
 			System.assertEquals(600000, ar.get('amt'));
 	}
@@ -24,7 +24,7 @@ public class UpdateAccountCA_Tests {
 		Test.startTest();
 		aggr = [SELECT SUM(Chiffre_d_affaire__c) amt FROM Account WHERE Id IN (SELECT AccountId FROM Order)];
 		Test.stopTest();
-		//Verify that the trigger correctly updated the CA
+		//Verify that the trigger correctly updated Chiffre_d_affaire__c field
 		for (AggregateResult ar : aggr)
 			System.assertEquals(0, ar.get('amt'));
 	}
