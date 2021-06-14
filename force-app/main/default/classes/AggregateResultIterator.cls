@@ -1,6 +1,12 @@
+/**
+ * @author Vanessa DREUX
+ * @date 14/06/2021
+ * @description This class implements the Iterator<AggregateResult> to provide method to define the conditions for exiting the loop
+ */
+
 global class AggregateResultIterator implements Iterator<AggregateResult> {
 	AggregateResult[] results { get; set; }
-	// Tracks which result item is returned
+
 	Integer index { get; set; }
 
 	global AggregateResultIterator(String query) {

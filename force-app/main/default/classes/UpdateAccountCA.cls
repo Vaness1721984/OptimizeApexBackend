@@ -1,3 +1,11 @@
+/**
+ * @author Vanessa DREUX
+ * @date 14/06/2021
+ * @description Update Chiffre_d_affaire__c field of Accounts with an aggregation of TotalAmount field from Orders
+ * @param List A list of Orders that should be concerned by the update of Chiffre_d_affaire__c field
+ * @param Map A map of Accounts with their Chiffre_d_affaire__c field set with an aggregation of TotalAmount field
+ */
+
 public class UpdateAccountCA {
 	public static void UpdateAccountCA(List<Order> listOfOrders) {
 		map<id, Account> updateMap = new Map<id, Account>();

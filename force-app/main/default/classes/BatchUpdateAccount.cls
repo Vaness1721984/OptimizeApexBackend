@@ -1,3 +1,9 @@
+/**
+ * @author Vanessa DREUX
+ * @date 14/06/2021
+ * @description This class implements Database.Batchable<AggregateResult> and Database.StatefulBatch
+ * to update Chiffre_d_affaire__c field with sum of TotalAmount field per order and count the number of records processed
+ */
 global class BatchUpdateAccount implements Database.Batchable<AggregateResult>, Database.Stateful {
 	public Integer recordsProcessed = 0;
 	global Iterable<AggregateResult> start(Database.BatchableContext info) {

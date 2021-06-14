@@ -1,3 +1,11 @@
+/**
+ * @author Vanessa DREUX
+ * @date 14/06/2021
+ * @description Update Net_Amount__c field of Orders with a formula
+ * @param List A list of OrderItems that should be concerned by the update of Net_Amount__c field
+ * @param Map A map of Orders with their Net_Amount__c field set with formula if list is not empty
+ * @param Map A map of Orders with their Net_Amount__c field set with 0 if list is empty
+ */
 public class CalculMontantClass {
 	public static void updateNetAmountOnOrder(List<OrderItem> listOfOrderItems) {
 		map<id, Order> updateMap = new Map<id, Order>();
