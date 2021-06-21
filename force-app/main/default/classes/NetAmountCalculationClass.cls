@@ -6,7 +6,7 @@
  * @param Map A map of Orders with their Net_Amount__c field set with formula if list is not empty
  * @param Map A map of Orders with their Net_Amount__c field set with 0 if list is empty
  */
-public class CalculMontantClass {
+public class NetAmountCalculationClass {
 	public static void updateNetAmountOnOrder(List<OrderItem> listOfOrderItems) {
 		map<id, Order> updateMap = new Map<id, Order>();
 		set<ID> ordset = new Set<ID>();

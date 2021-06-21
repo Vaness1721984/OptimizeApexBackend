@@ -4,7 +4,7 @@ public class BatchUpdateAccount_Tests {
 	static void testUpdateCAwith1000AccountsInBatch() {
 		List<AggregateResult> aggr;
 		// Retrieve data set from DataFactory class
-		TestFactory.createTestRecordsToUpdateAccountCAInBatch(1000, 1, 1);
+		TestFactory.createTestRecordsToUpdateAccountCAInBatch(1, 200, 1);
 		// Execute Batch
 		Test.startTest();
 		BatchUpdateAccount ua = new BatchUpdateAccount();
@@ -13,6 +13,6 @@ public class BatchUpdateAccount_Tests {
 		Test.stopTest();
 		// After the testing stops, assert records were updated properly
 		for (AggregateResult ar : aggr)
-			System.assertEquals(500000.00, ar.get('amt'));
+			System.assertEquals(100000.00, ar.get('amt'));
 	}
 }

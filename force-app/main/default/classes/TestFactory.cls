@@ -184,7 +184,7 @@ public class TestFactory {
 		delete oi;
 	}
 
-	public static void createTestRecordsForCalculMontantForInsertTrigger() {
+	public static void createTestRecordsForNetAmountCalculationForInsertTrigger() {
 		// Create a product
 		Product2 pd1 = new Product2(
 			Name = 'Chemise Verte longue XYX',
@@ -246,7 +246,7 @@ public class TestFactory {
 		);
 		insert oi2;
 	}
-	public static void createTestRecordsForCalculMontantForDeleteTrigger() {
+	public static void createTestRecordsForNetAmountCalculationForDeleteTrigger() {
 		// Create a product
 		Product2 pd1 = new Product2(
 			Name = 'Chemise Verte longue XYX',
